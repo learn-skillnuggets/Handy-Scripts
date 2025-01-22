@@ -1,0 +1,1 @@
+list all resolvable hostnames or IP addresses line by line
