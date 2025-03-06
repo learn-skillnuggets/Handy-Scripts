@@ -1,0 +1,18 @@
+[all_routers]
+Hostname1
+hostname2
+
+[group1]
+Hostname1
+
+[group2]
+Hostname2
+
+[all_routers:vars]
+ansible_user=YOUT LOGIN USERNAME
+ansible_password=YOUR LOGIN PASSWORD
+ansible_connection=network_cli
+ansible_network_os=iosxr
+ansible_become=yes
+ansible_become_method=enable
+ansible_ssh_common_args='-o PreferredAuthentications=password'
