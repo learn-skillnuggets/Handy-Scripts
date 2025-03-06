@@ -1,0 +1,41 @@
+---
+- name: Gather show commands from IOS-XR routers and generate HTML report
+  hosts: all_routers
+  gather_facts: no
+
+  tasks:
+    - name: Run show commands on routers
+      ansible.netcommon.cli_command:
+        command: "{{ item }}"
+      loop:
+        - "show interfaces summary"
+        - "show interfaces description"
+        - "show ipv4 interface brief"
+        - "show interfaces detail"
+        - "show arp"
+        - "show arp vrf all"
+        - "show bgp all all summary"
+        - "show bgp vrf all summary"
+        - "show route summary"
+        - "show l2vpn xconnect"
+      register: command_output
+
+    - name: Save output to a text file
+      copy:
+        content: |
+          Hostname: {{ inventory_hostname }}
+          ------------------------------
+          {% for result in command_output.results %}
+          Command: {{ result.item }}
+          ------------------------------
+          {{ result.stdout }}
+          
+          {% endfor %}
+        dest: "./{{ inventory_hostname }}_output.txt"
+
+    - name: Generate HTML report
+      template:
+        src: network_report_template.j2
+        dest: "./network_report.html"
+      delegate_to: localhost
+
