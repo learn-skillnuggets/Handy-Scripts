@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .device { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; background: #f9f9f9; }
+        pre { background: #e8e8e8; padding: 10px; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+    <h1>Network Report</h1>
+
+    {% for host in groups['all_routers'] %}
+    <div class="device">
+        <h2>Device: {{ host }}</h2>
+        <pre>
+{% for result in hostvars[host].command_output.results %}
+Command: {{ result.item }}
+--------------------------------------------------
+{{ result.stdout }}
+{% endfor %}
+        </pre>
+    </div>
+    {% endfor %}
+
+</body>
+</html>
+
